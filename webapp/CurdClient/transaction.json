@@ -7,10 +7,10 @@
     "category": "food",
     "attachments":[
 	    { 
-		"url" : "~/mys3bucket/image1.jpg"
+		"url" : "myS3Bucket/receipt1.jpg"
 	    },
 	    {
-                "url" : "~/mys3bucket/image2.jpg"
+                "url" : "myS3Bucket/receipt2.jpg"
 	    }
 
     ]
