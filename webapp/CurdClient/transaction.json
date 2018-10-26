@@ -7,11 +7,7 @@
     "category": "food",
     "attachments":[
 	    { 
-		"url" : "myS3Bucket/receipt1.jpg"
-	    },
-	    {
-                "url" : "myS3Bucket/receipt2.jpg"
+		"url" : "http://s3.amazonaws.com/csye6225-fall2018-chengl.me.com/receipt1"
 	    }
-
     ]
 }
