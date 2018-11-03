@@ -8,6 +8,11 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.StandardEnvironment;
+import org.springframework.core.io.support.ResourcePropertySource;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileInputStream;
@@ -15,18 +20,24 @@ import java.io.IOException;
 import java.net.URL;
 
 public class AWSS3Impl implements AWSS3 {
-    private static String rootPath = "/Users/xingli/Desktop/neu/class/2018fall/CSYE6225cloudcomputing/test";
-    private static String BUCKET_NAME   = "csye6225-fall2018-lixing1.me.csye6225.com";
-    //private static String ACCESS_KEY    = "AKIAIMCXJCWJTC33JD4Q";
-    //private static String SECRET_KEY    = "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";
-    private static String ACCESS_KEY    = "AKIAJM3UVUH37VK7LTEQ";
-    private static String SECRET_KEY    = "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";
+    private static String BUCKET_NAME   = "csye6225-fall2018-chengl.me.csye6225.com";
+    private static String ACCESS_KEY;
+    private static String SECRET_KEY;
 
-    final String ENDPOINT = "s3.us-east-1.amazonaws.com";
+    final String ENDPOINT = "s3.amazonaws.com";
 
     private static AWSS3Impl instance = null;
 
     private AWSS3Impl() {
+        ResourcePropertySource propertySource2 = null; //name, location
+        try {
+            propertySource2 = new ResourcePropertySource("resources", "classpath:application.properties");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ACCESS_KEY = propertySource2.getProperty("ACCESS_KEY").toString();
+        SECRET_KEY = propertySource2.getProperty("SECRET_KEY").toString();
+
     }
 
     public static AWSS3Impl getInstance() {
@@ -34,8 +45,14 @@ public class AWSS3Impl implements AWSS3 {
             instance = new AWSS3Impl();
         return instance;
     }
+
+
     @Override
     public String uploadToS3(MultipartFile file) {
+        System.out.println(ACCESS_KEY);
+        System.out.println(SECRET_KEY);
+
+
         AWSCredentials credentials = new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY);
         ClientConfiguration clientConfig = new ClientConfiguration();
         clientConfig.setProtocol(Protocol.HTTP);
@@ -55,7 +72,7 @@ public class AWSS3Impl implements AWSS3 {
 
         conn.putObject(BUCKET_NAME , key , fi, metadata);
         System.out.println("putobject:--" + "");
-        System.out.println("object:+" + conn.getObject(BUCKET_NAME, key));
+        //System.out.println("object:+" + conn.getObject(BUCKET_NAME, key));
 
 
 
@@ -67,6 +84,19 @@ public class AWSS3Impl implements AWSS3 {
 
     @Override
     public void deleteToS3(String url) {
+
+
+
+        ResourcePropertySource propertySource2 = null; //name, location
+        try {
+            propertySource2 = new ResourcePropertySource("resources", "classpath:application.properties");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        System.out.println("ACCESS_KEY: " + ACCESS_KEY);
+        System.out.println("SECRET_KEY: " + SECRET_KEY);
         AWSCredentials credentials = new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY);
         ClientConfiguration clientConfig = new ClientConfiguration();
         clientConfig.setProtocol(Protocol.HTTP);
