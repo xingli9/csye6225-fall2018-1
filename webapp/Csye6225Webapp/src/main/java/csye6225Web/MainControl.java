@@ -20,29 +20,12 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 @SpringBootApplication
 public class MainControl extends SpringBootServletInitializer{
 
-//      @Bean
-//      public CommandLineRunner setupDefaultUser(UserService service) {
-//          return args -> {
-//              service.save(new User(
-//                      "user", //username
-//                      "user", //password
-//                      Arrays.asList(new Role("USER"), new Role("ACTUATOR")),//roles
-//                      true//Active
-//              ));
-//          };
-//      }
-//
-//    @Bean
-//    public PasswordEncoder getPasswordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
 
         return builder.sources(MainControl.class);
     }
-
 
 
 

@@ -5,14 +5,10 @@ import com.amazonaws.Protocol;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.core.env.StandardEnvironment;
+import csye6225Web.config.propertyUtil;
 import org.springframework.core.io.support.ResourcePropertySource;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileInputStream;
@@ -20,24 +16,14 @@ import java.io.IOException;
 import java.net.URL;
 
 public class AWSS3Impl implements AWSS3 {
-    private static String BUCKET_NAME   = "csye6225-fall2018-chengl.me.csye6225.com";
-    private static String ACCESS_KEY;
-    private static String SECRET_KEY;
-
-    final String ENDPOINT = "s3.amazonaws.com";
+    private String BUCKET_NAME   = propertyUtil.BUCKET_NAME;
+    private String ACCESS_KEY = propertyUtil.ACCESS_KEY;
+    private String SECRET_KEY = propertyUtil.SECRET_KEY;
+    private String ENDPOINT = propertyUtil.ENDPOINT;
 
     private static AWSS3Impl instance = null;
 
     private AWSS3Impl() {
-        ResourcePropertySource propertySource2 = null; //name, location
-        try {
-            propertySource2 = new ResourcePropertySource("resources", "classpath:application.properties");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        ACCESS_KEY = propertySource2.getProperty("ACCESS_KEY").toString();
-        SECRET_KEY = propertySource2.getProperty("SECRET_KEY").toString();
-
     }
 
     public static AWSS3Impl getInstance() {
@@ -65,7 +51,7 @@ public class AWSS3Impl implements AWSS3 {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String key = "csye6225" + "/" + file.getOriginalFilename();
+        String key = file.getOriginalFilename();
 
         URL connurl = conn.getUrl(BUCKET_NAME, key);
         System.out.println("URL: " + connurl.toString());

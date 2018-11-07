@@ -4,7 +4,9 @@ package csye6225Web.serviceController;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-//import csye6225Web.models.JsObject;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.BasicAWSCredentials;
+import csye6225Web.config.propertyUtil;
 import csye6225Web.daos.UserImpl;
 import csye6225Web.models.User;
 import csye6225Web.repositories.UserRepository;
@@ -13,15 +15,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import com.amazonaws.services.sns.AmazonSNSClient;
+import com.amazonaws.services.sns.model.PublishRequest;
+import com.amazonaws.services.sns.model.PublishResult;
 import java.util.UUID;
-
-
-
 
 @Controller
 public class ServicesController {
@@ -129,5 +129,40 @@ public class ServicesController {
         }
 
         return obj.toString();
+    }
+
+    @RequestMapping(value = "/reset", method = RequestMethod.POST)
+    @ResponseBody
+    public String resetPassword(@RequestHeader(value="username", required = true) String username,
+                                @RequestHeader(value="password", required = true) String password) {
+        String rst = "";
+        JSONArray obj = new JSONArray();
+        String ARN = "arn:aws:sns:us-east-1:398590284929:Csye6225Topic";
+        //authorization------
+        UserImpl userImpl = UserImpl.getInstance();
+        String user_id = userImpl.register(username, password);
+        if (user_id.equals("")) {
+            return "User NOT FOUND";
+        }
+        //-----------------
+
+        AWSCredentials credentials = new BasicAWSCredentials(propertyUtil.ACCESS_KEY, propertyUtil.SECRET_KEY);
+        //create a new SNS client and set endpoint
+        AmazonSNSClient snsClient = new AmazonSNSClient(credentials);
+
+        try {
+            obj.put(new JSONObject().put("username", username).put(" password", password));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        //publish to an SNS topic
+        String msg = obj.toString();
+        PublishRequest publishRequest = new PublishRequest(ARN, msg);
+        PublishResult publishResult = snsClient.publish(publishRequest);
+        //print MessageId of message published to SNS topic
+        System.out.println("MessageId - " + publishResult.getMessageId());
+        rst = "Publish message to SNS successful!";
+
+        return rst;
     }
 }
