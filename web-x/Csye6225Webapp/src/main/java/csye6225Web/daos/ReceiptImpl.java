@@ -6,6 +6,7 @@ import csye6225Web.models.Receipt;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Collection;
 
 public class ReceiptImpl implements ReceiptDao{
     private static ReceiptImpl instance = null;

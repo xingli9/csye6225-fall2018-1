@@ -1,17 +1,21 @@
 package csye6225Web.daos;
 
+import com.mysql.jdbc.MySQLConnection;
 import csye6225Web.MyConnection;
 import csye6225Web.models.Transaction;
 import csye6225Web.models.User;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 public class UserImpl implements UserDao {
@@ -53,12 +57,12 @@ public class UserImpl implements UserDao {
                 return a.getUserid();
             } else {
                 System.out.println("Password is incorrect!");
-                //rst = "Password is incorrect!";
+                rst = "Password is incorrect!";
                 return rst;
             }
         }
         System.out.println("User name does not exist!");
-        //rst = "User name does not exist!";
+        rst = "User name does not exist!";
         return rst;
     }
 

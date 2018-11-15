@@ -1,5 +1,6 @@
 package csye6225Web.serviceController;
 
+import com.sun.xml.internal.bind.v2.util.CollisionCheckStack;
 import csye6225Web.daos.*;
 import csye6225Web.models.Receipt;
 import csye6225Web.models.Transaction;
@@ -161,7 +162,6 @@ public class TransactionControllerUseDao {
         Optional<Transaction> transaction=transactionRepository.findById(id);
         Transaction transaction1 = transaction.get();
         TransactionImpl transaction2 = TransactionImpl.getInstance();
-        LocalImpl local = LocalImpl.getInstance();
 
         //authorization------
         UserImpl userImpl = UserImpl.getInstance();

@@ -2,7 +2,6 @@ package csye6225Web.serviceController;
 
 
 import csye6225Web.daos.AWSS3Impl;
-import csye6225Web.daos.LocalImpl;
 import csye6225Web.daos.ReceiptImpl;
 import csye6225Web.daos.UserImpl;
 import csye6225Web.models.Receipt;
@@ -66,7 +65,6 @@ public class ReceiptController {
         Optional<Transaction> transaction=transactionRepository.findById(id);
         ReceiptImpl receiptImpl = ReceiptImpl.getInstance();
         AWSS3Impl awss3 = AWSS3Impl.getInstance();
-        LocalImpl local = LocalImpl.getInstance();
 
         //authorization------
         UserImpl userImpl = UserImpl.getInstance();
